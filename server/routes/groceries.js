@@ -5,12 +5,13 @@ const knex = require('../knex')
 
 router.post('/', (req, res, next) => {
   let { name, quantity } = req.body
-  quantity = +quantity
+  quantity = parseInt(quantity)
 
+    console.log("POST", req.body, name, quantity)
   knex('groceries')
     .insert({ name, quantity }, '*')
     .then(data => {
-      res.json(data)
+      res.json(data[0])
     })
 })
 
@@ -29,7 +30,8 @@ router.get('/:id', function(req, res, next) {
 
 router.put('/:id', (req, res, next) => {
   const id = req.params.id
-  const { name, quantity } = req.body
+  let { name, quantity } = req.body
+  quantity = parseInt(quantity)
 
   knex('groceries')
     .where('id', id)
@@ -46,5 +48,8 @@ router.delete('/:id', function(req, res, next) {
     res.json({message: 'deleted'});
   })
 });
+
+const notFound = () => {
+}
 
 module.exports = router;
